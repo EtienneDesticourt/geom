@@ -10,7 +10,7 @@ defmodule Ai.Astar do
   def find_path(nav_mesh, start, goal) do
     extreme_faces = find_extreme_faces(nav_mesh, start, goal)
     case extreme_faces do
-      {single_face, single_face} ->
+      {%Face{} = single_face, %Face{} = single_face} ->
         %Path{}
         |> Path.add(start)
         |> Path.add(goal)
@@ -21,6 +21,40 @@ defmodule Ai.Astar do
       _ -> Path.empty()
     end
   end
+
+  defp find_path(start, goal, nav_mesh) do
+    closed_set = []
+    open_set = [start]
+    paths = %{}
+    parent_vertex = nil
+    gscore = %{start => 0}
+    fscore = %{start => calc_f_score(start, start, goal)}
+
+
+
+    end
+
+
+  end
+
+  defp find_best_neighbor(neighbor, parent, open_set, closed_set, g_score, f_score, paths, goal) do
+    unless MapSet.member?(closed_set, neighbor) do
+      new_g_score = Map.fetch(g_score, parent) + Vector2D.norm(Vector2D.sub(neighbor, parent))
+
+      in_open_set? = MapSet.member?(open_set, neighbor)
+      unless in_open_set? do
+        open_set = MapSet.put(open_set, neighbor)
+      end
+
+      unless not in_open_set? and new_g_score >= Map.fetch(g_score, neighbor) do
+        paths = %{paths | neighbor => parent}
+        g_score = %{g_score | neighbor => new_g_score}
+        f_score = %{f_score | neighbor => new_g_score + Vector2D.norm(Vector2D.sub(neighbor, goal))
+      end
+    end
+    {open_set, g_score, f_score, paths}
+  end
+
 
   defp find_path_recursion(open, closed, parent_vertex, nav_mesh, start, goal) do
     closed = closed ++ parent_vertex
@@ -36,7 +70,6 @@ defmodule Ai.Astar do
     h = Vector.norm(Vector.sub(goal, vertex))
     g + h
   end
-
 
   #TODO: remove spec if not useful for private functions
   #TODO: Fix the placeholder logic below
