@@ -31,7 +31,28 @@ defmodule Ai.Astar do
     fscore = %{start => calc_f_score(start, start, goal)}
 
 
+    
 
+    
+
+
+
+  end
+
+  defp evaluate_best_open_vertex(vertex, open_set, closed_set, g_score, f_score, paths, goal, goal_face) do
+    current = Enum.min_by(open_set, fn(v) -> Map.fetch!(f_score, v) end)
+    if Face.contains?(goal_face, current) do
+      
+    else
+      open_set   = MapSet.remove(open_set, current)
+      closed_set = MapSet.put(closed_set, current)
+      
+      neighbor_vertices = NavMesh.get_adjacent_vertices(nav_mesh, current_vertex)
+      {open_set, g_score, f_score, paths} = Enum.reduce(neighbor_vertices,  
+            {open_set, g_score, f_score, paths},
+            fn(v, {open_set, g_score, f_score, paths}) -> 
+              find_best_neighbor(v, current_vertex, open_set, closed_set, g_score, f_score, paths, goal) 
+            end)
     end
 
 
