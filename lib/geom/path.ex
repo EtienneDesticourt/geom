@@ -7,5 +7,5 @@ defmodule Geom.Path do
   do: %Path{}
 
   def add(%Path{vertices: vertices}, vertex),
-  do: %Path{vertices: [vertex | vertices]}
+  do: %Path{vertices: vertices |> List.insert_at(-1, vertex)}
 end
