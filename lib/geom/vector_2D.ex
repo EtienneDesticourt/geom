@@ -2,15 +2,15 @@ defmodule Geom.Vector2D do
   @moduledoc """
   """
   alias Geom.Vector
-  alias Geom.Vector2D
-  @behaviour Vector
 
   @type t :: Vector.t
 
   defstruct x: 0, y: 0
+end
 
-  def new({x, y}) when is_number(x) and is_number(y),
-  do: %Vector2D{x: x, y: y}
+defimpl Geom.Vector, for: Geom.Vector2D do
+  alias Geom.Vector
+  alias Geom.Vector2D
 
   def add(%Vector2D{x: x1, y: y1}, %Vector2D{x: x2, y: y2}),
   do: %Vector2D{x: x1 + x2, y: y1 + y2}
@@ -40,5 +40,5 @@ defmodule Geom.Vector2D do
   do: :math.sqrt(:math.pow(x, 2) + :math.pow(y, 2))
 
   def unit(%Vector2D{} = vector),
-  do: Vector2D.div(vector, Vector2D.norm(vector))
+  do: Vector.div(vector, Vector.norm(vector))
 end

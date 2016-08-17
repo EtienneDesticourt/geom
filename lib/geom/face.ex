@@ -2,7 +2,7 @@ defmodule Geom.Face do
   @moduledoc """
   """
   alias Geom.Face
-  alias Geom.Vector2D, as: Vector
+  alias Geom.Vector
 
   @type t :: %Face{v1: Vector.t, v2: Vector.t, v3: Vector.t}
 

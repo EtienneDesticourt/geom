@@ -1,7 +1,7 @@
 defmodule Ai.Astar do
   @moduledoc """
   """
-  alias Geom.Vector2D, as: Vector
+  alias Geom.Vector, as: Vector
   alias Geom.Face
   alias Geom.NavigationMesh, as: NavMesh
   alias Geom.Path

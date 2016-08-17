@@ -1,25 +1,21 @@
-defmodule Geom.Vector do
+defprotocol Geom.Vector do
   @moduledoc """
   """
-  alias Geom.Vector, as: Vector
+  alias Geom.Vector2D
 
   @type t :: tuple
 
-  @callback new(tuple) :: Vector.t
+  def add(vector1, vector_or_scalar)
 
-  @callback add(Vector.t, Vector.t) :: Vector.t
-  @callback add(Vector.t, float)    :: Vector.t
+  def sub(vector1, vector_or_scalar)
 
-  @callback sub(Vector.t, Vector.t) :: Vector.t
-  @callback sub(Vector.t, float)    :: Vector.t
+  def mul(vector1, scalar)
 
-  @callback mul(Vector.t, float)    :: Vector.t
+  def div(vector1, scalar)
 
-  @callback div(Vector.t, float)    :: Vector.t
+  def dot(vector1, vector2)
 
-  @callback dot(Vector.t, Vector.t) :: float
+  def norm(vector1)
 
-  @callback norm(Vector.t) :: float
-
-  @callback unit(Vector.t) :: Vector.t
+  def unit(vector1)
 end
