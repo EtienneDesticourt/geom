@@ -5,6 +5,7 @@ defprotocol Geom.Vector do
 
   @type t :: tuple
 
+  @doc "Returns a vector with the coordinates of the two given vector summed 2 by 2, or the scalar added to each coord."
   def add(vector1, vector_or_scalar)
 
   def sub(vector1, vector_or_scalar)
