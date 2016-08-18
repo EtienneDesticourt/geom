@@ -4,7 +4,7 @@ defmodule NavigationMeshTest do
   alias Geom.Face
   alias Geom.Vector2D
 
-  test "get adjacent vertices" do
+  setup do
     v1 = %Vector2D{x: 1, y: 2}
     v2 = %Vector2D{x: 3, y: 4}
     v3 = %Vector2D{x: 5, y: 6}
@@ -33,9 +33,15 @@ defmodule NavigationMeshTest do
 
     nav_mesh = %NavMesh{faces: faces, vertices: vertices}
 
-
-    assert [^v2, ^v3, ^v5, ^v6] = NavMesh.get_adjacent_vertices(nav_mesh, v1)
+    {:ok, %{nav_mesh: nav_mesh, v1: v1, v2: v2, v3: v3, v5: v5, v6: v6}}
   end
 
+  test "get adjacent vertices success", %{nav_mesh: nav_mesh, v1: v1, v2: v2, v3: v3, v5: v5, v6: v6} do
+    assert {:ok, [^v2, ^v3, ^v5, ^v6]} = NavMesh.get_adjacent_vertices(nav_mesh, v1)
+  end
 
+  test "get adjacent vertices failure vertex not in nav mesh", %{nav_mesh: nav_mesh} do
+    message = NavMesh.error_vertex_not_in_mesh
+    assert {:error, ^message} = NavMesh.get_adjacent_vertices(nav_mesh, %Vector2D{x: 22, y: 13})
+  end
 end

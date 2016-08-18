@@ -15,39 +15,39 @@ defmodule Ai.Astar do
         |> Path.add(start)
         |> Path.add(goal)
 
-      {%Face{} = _start_face, %Face{} = goal_face} ->
-        find_path(start, goal, goal_face, nav_mesh)
+      {%Face{} = start_face, %Face{} = goal_face} ->
+        find_path(start, goal, start_face, goal_face, nav_mesh)
 
       _ ->
         Path.empty()
     end
   end
 
-  defp find_path(start, goal, goal_face, nav_mesh) do
-    closed_set = MapSet.new
-    open_set = MapSet.put(MapSet.new, start)
-    parents = %{}
-    parent_vertex = nil
-    g_score = %{start => 0}
-    f_score = %{start => calc_f_score(start, start, goal)}
+  defp find_path(start, goal, %Face{v1: v1, v2: v2, v3: v3} = start_face, goal_face, nav_mesh) do
+    closed_set = MapSet.new |> MapSet.put(start)
+    nav_mesh_start = Enum.min_by([v1, v2, v3], fn(v) -> calc_f_score(v, start, goal) end)
+    open_set = MapSet.put(MapSet.new, nav_mesh_start)
+    parents = %{nav_mesh_start => start}
+    g_score = %{nav_mesh_start => 0}
+    f_score = %{nav_mesh_start => calc_f_score(start, start, goal)}
 
     build_path(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh)
   end
 
   defp build_path(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh) do
     current = Enum.min_by(open_set, fn(v) -> Map.fetch!(f_score, v) end)
-    IO.inspect current
+
     if Face.contains?(goal_face, current) do
-      retrace_steps(parents,current, goal, %Path{})
+      retrace_steps(parents, current, goal, %Path{})
     else
       open_set   = MapSet.delete(open_set, current)
       closed_set = MapSet.put(closed_set, current)
 
-      neighbor_vertices = NavMesh.get_adjacent_vertices(nav_mesh, current)
+      {:ok, neighbor_vertices} = NavMesh.get_adjacent_vertices(nav_mesh, current)
       {open_set, g_score, f_score, parents} = Enum.reduce(neighbor_vertices,
             {open_set, g_score, f_score, parents},
             fn(v, {open_set, g_score, f_score, parents}) ->
-              find_best_neighbor(v, current, open_set, closed_set, g_score, f_score, parents, goal)
+              find_best_neighbor(v, current, goal, open_set, closed_set, g_score, f_score, parents)
             end)
 
       unless MapSet.size(open_set) == 0 do
@@ -58,9 +58,9 @@ defmodule Ai.Astar do
     end
   end
 
-  defp find_best_neighbor(neighbor, parent, goal, open_set, closed_set, g_score, f_score, paths) do
+  defp find_best_neighbor(neighbor, parent, goal, open_set, closed_set, g_score, f_score, parents) do
     unless MapSet.member?(closed_set, neighbor) do
-      new_g_score = Map.fetch(g_score, parent) + Vector.norm(Vector.sub(neighbor, parent))
+      new_g_score = Map.fetch!(g_score, parent) + Vector.norm(Vector.sub(neighbor, parent))
 
       in_open_set? = MapSet.member?(open_set, neighbor)
       unless in_open_set? do
@@ -68,12 +68,12 @@ defmodule Ai.Astar do
       end
 
       unless not in_open_set? and new_g_score >= Map.fetch(g_score, neighbor) do
-        paths = %{paths | neighbor => parent}
-        g_score = %{g_score | neighbor => new_g_score}
-        f_score = %{f_score | neighbor => new_g_score + Vector.norm(Vector.sub(neighbor, goal))}
+        parents = Map.put(parents, neighbor, parent)
+        g_score = Map.put(g_score, neighbor, new_g_score)
+        f_score = Map.put(f_score, neighbor, new_g_score + Vector.norm(Vector.sub(neighbor, goal)))
       end
     end
-    {open_set, g_score, f_score, paths}
+    {open_set, g_score, f_score, parents}
   end
 
   defp retrace_steps(parents, last_step, goal, %Path{} = path) do
@@ -82,11 +82,12 @@ defmodule Ai.Astar do
       parent = Map.fetch!(parents, last_step)
       retrace_steps(parents, parent, goal, path)
     else
-      case last_step do
+      path = case Path.first(path) do
         ^goal -> path
 
-        _ -> Path.add(path, goal)
+        _ -> Path.insert_first(path, goal)
       end
+      Path.reverse(path)
     end
   end
 

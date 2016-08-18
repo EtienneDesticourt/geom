@@ -1,4 +1,7 @@
 defmodule Geom.Path do
+  @module_doc """
+  A pretty useless wrapper for list for now.
+  """
   alias Geom.Path
 
   defstruct vertices: []
@@ -6,6 +9,15 @@ defmodule Geom.Path do
   def empty(),
   do: %Path{}
 
+  def first(%Path{vertices: vertices}),
+  do: List.first(vertices)
+
   def add(%Path{vertices: vertices}, vertex),
   do: %Path{vertices: vertices |> List.insert_at(-1, vertex)}
+
+  def insert_first(%Path{vertices: vertices}, vertex),
+  do: %Path{vertices: vertices |> List.insert_at(0, vertex)}
+
+  def reverse(%Path{vertices: vertices}),
+  do: %Path{vertices: vertices |> Enum.reverse}
 end
