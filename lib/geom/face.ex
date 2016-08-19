@@ -1,6 +1,8 @@
 defmodule Geom.Face do
   @moduledoc """
+  The face of a polygon represented by its 3 vertices.
   """
+
   alias Geom.Face
   alias Geom.Vector
 
@@ -8,6 +10,7 @@ defmodule Geom.Face do
 
   defstruct v1: nil, v2: nil, v3: nil
 
+  @doc "Returns true if the vector is inside the face, false otherwise."
   @spec contains?(Face.t, Vector.t) :: boolean
   def contains?(%Face{v1: v1, v2: v2, v3: v3}, v0) do
     if v0 == v1 or v0 == v2 or v0 == v3 do

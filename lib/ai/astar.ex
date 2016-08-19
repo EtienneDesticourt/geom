@@ -1,28 +1,30 @@
 defmodule Ai.Astar do
   @moduledoc """
+
   """
-  alias Geom.Vector, as: Vector
+
   alias Geom.Face
   alias Geom.NavigationMesh, as: NavMesh
   alias Geom.Path
+  alias Geom.Vector
 
+  @doc "Returns a path from the start vector to the goal vector along the nav mesh if it exists."
   @spec get_path(NavMesh.t, Vector.t, Vector.t) :: Path.t
   def get_path(nav_mesh, start, goal) do
     extreme_faces = find_extreme_faces(nav_mesh, start, goal)
     case extreme_faces do
       {%Face{} = single_face, %Face{} = single_face} ->
-        %Path{}
-        |> Path.add(start)
-        |> Path.add(goal)
+        %Path{vertices: [start, goal]}
 
       {%Face{} = start_face, %Face{} = goal_face} ->
         find_path(start, goal, start_face, goal_face, nav_mesh)
 
       _ ->
-        Path.empty()
+        Path.empty
     end
   end
 
+  @spec find_path(Vector.t, Vector.t, Face.t, Face.t, NavMesh.t) :: Path.t
   defp find_path(start, goal, %Face{v1: v1, v2: v2, v3: v3} = start_face, goal_face, nav_mesh) do
     closed_set = MapSet.new |> MapSet.put(start)
     nav_mesh_start = Enum.min_by([v1, v2, v3], fn(v) -> calc_f_score(v, start, goal) end)
@@ -31,10 +33,11 @@ defmodule Ai.Astar do
     g_score = %{nav_mesh_start => 0}
     f_score = %{nav_mesh_start => calc_f_score(start, start, goal)}
 
-    build_path(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh)
+    find_path_recursion(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh)
   end
 
-  defp build_path(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh) do
+  @spec find_path_recursion(MapSet.t, MapSet.t, Map, Map, Map, Vector.t, Face.t, NavMesh.t) :: Path.t
+  defp find_path_recursion(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh) do
     current = Enum.min_by(open_set, fn(v) -> Map.fetch!(f_score, v) end)
 
     if Face.contains?(goal_face, current) do
@@ -44,21 +47,26 @@ defmodule Ai.Astar do
       closed_set = MapSet.put(closed_set, current)
 
       {:ok, neighbor_vertices} = NavMesh.get_adjacent_vertices(nav_mesh, current)
-      {open_set, g_score, f_score, parents} = Enum.reduce(neighbor_vertices,
-            {open_set, g_score, f_score, parents},
-            fn(v, {open_set, g_score, f_score, parents}) ->
-              find_best_neighbor(v, current, goal, open_set, closed_set, g_score, f_score, parents)
-            end)
+      {open_set, g_score, f_score, parents} = evaluate_neighbors(neighbor_vertices, current, goal, open_set, closed_set, g_score, f_score, parents)
 
       unless MapSet.size(open_set) == 0 do
-        build_path(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh)
+        find_path_recursion(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh)
       else
         %Path{}
       end
     end
   end
 
-  defp find_best_neighbor(neighbor, parent, goal, open_set, closed_set, g_score, f_score, parents) do
+  defp evaluate_neighbors(neighbors, current, goal, open_set, closed_set, g_score, f_score, parents) do
+    acc = {open_set, g_score, f_score, parents}
+    Enum.reduce(neighbors, acc,
+      fn(v, {open_set, g_score, f_score, parents}) ->
+        evaluate_neighbor(v, current, goal, open_set, closed_set, g_score, f_score, parents)
+      end)
+  end
+
+  @spec evaluate_neighbor(Vector.t, Vector.t, Vector.t, MapSet.t, MapSet.t, Map, Map, Map) :: {MapSet.t, Map, Map, Map}
+  defp evaluate_neighbor(neighbor, parent, goal, open_set, closed_set, g_score, f_score, parents) do
     unless MapSet.member?(closed_set, neighbor) do
       new_g_score = Map.fetch!(g_score, parent) + Vector.norm(Vector.sub(neighbor, parent))
 
@@ -76,6 +84,7 @@ defmodule Ai.Astar do
     {open_set, g_score, f_score, parents}
   end
 
+  @spec retrace_steps(%{}, Vector.t, Vector.t, Path.t) :: Path.t
   defp retrace_steps(parents, last_step, goal, %Path{} = path) do
     path = Path.add(path, last_step)
     if Map.has_key?(parents, last_step) do
@@ -91,21 +100,17 @@ defmodule Ai.Astar do
     end
   end
 
+  @spec find_extreme_faces(NavMesh.t, Vector.t, Vector.t) :: Face.t
+  defp find_extreme_faces(%NavMesh{faces: faces} = nav_mesh, start, goal) do
+    start_face = NavMesh.find_containing_face(nav_mesh, start)
+    goal_face  = NavMesh.find_containing_face(nav_mesh, goal)
+    {start_face, goal_face}
+  end
+
+  @spec calc_f_score(Vector.t, Vector.t, Vector.t) :: float
   defp calc_f_score(vertex, start, goal) do
     g = Vector.norm(Vector.sub(vertex, start))
     h = Vector.norm(Vector.sub(goal, vertex))
     g + h
-  end
-
-  @spec find_extreme_faces(NavMesh.t, Vector.t, Vector.t) :: Face.t
-  defp find_extreme_faces(%NavMesh{faces: faces} = _nav_mesh, start, goal) do
-    Enum.reduce(faces, {nil, nil},
-      fn(face, {start_face, end_face}) ->
-        if Face.contains?(face, start),
-        do: start_face = face
-        if Face.contains?(face, goal),
-        do: end_face = face
-        {start_face, end_face}
-      end)
   end
 end

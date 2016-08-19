@@ -1,7 +1,8 @@
 defmodule Geom do
+	@moduledoc """
+	The Geom project holds representations of different geometric shapes as well as functions and algorithms used for their manipulation.
+	"""
   #TODO: clean up astar
-  #TODO: Add doc to all mods and funcs
-  #TODO: Add specs where necessary
   #TODO: Add collisions
   #         Add edge intersection logic
   #         Check floats

@@ -1,5 +1,6 @@
 defmodule Geom.Vector2D do
   @moduledoc """
+  A 2D implementation of the vector protocol.
   """
   alias Geom.Vector
 

@@ -1,7 +1,8 @@
 defmodule Geom.Path do
-  @module_doc """
-  A pretty useless wrapper for list for now.
+  @moduledoc """
+  A pretty useless wrapper for List for now.
   """
+
   alias Geom.Path
 
   defstruct vertices: []
