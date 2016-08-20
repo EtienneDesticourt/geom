@@ -1,24 +1,16 @@
 # Geom
 
-**TODO: Add description**
+The geom project gives access to a variety of geometric shapes and the algorithms necessary for their manipulation.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+The package can be installed as:
 
-  1. Add `geom` to your list of dependencies in `mix.exs`:
+  Add `geom` to your list of dependencies in `mix.exs`:
 
     ```elixir
     def deps do
       [{:geom, "~> 0.1.0"}]
-    end
-    ```
-
-  2. Ensure `geom` is started before your application:
-
-    ```elixir
-    def application do
-      [applications: [:geom]]
     end
     ```
 
