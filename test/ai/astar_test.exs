@@ -31,14 +31,14 @@ defmodule Ai.AstarTest do
 
 
     faces = MapSet.new([face1, face2, face3, face4, face5, face6, face7])
-    vertices = %{v1 => [face1],
-                 v2 => [face1, face2, face4],
-                 v3 => [face1, face2, face3],
-                 v4 => [face2, face3, face4, face5, face6],
-                 v5 => [face3, face5],
-                 v6 => [face4, face6, face7],
-                 v7 => [face5, face6, face7],
-                 v8 => [face7]}
+    vertices = %{v1 => MapSet.new([face1]),
+                 v2 => MapSet.new([face1, face2, face4]),
+                 v3 => MapSet.new([face1, face2, face3]),
+                 v4 => MapSet.new([face2, face3, face4, face5, face6]),
+                 v5 => MapSet.new([face3, face5]),
+                 v6 => MapSet.new([face4, face6, face7]),
+                 v7 => MapSet.new([face5, face6, face7]),
+                 v8 => MapSet.new([face7])}
 
     {:ok, %{nav_mesh: %NavMesh{faces: faces, vertices: vertices}}}
   end
