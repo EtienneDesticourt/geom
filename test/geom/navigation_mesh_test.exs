@@ -43,7 +43,7 @@ defmodule NavigationMeshTest do
     {:ok, %{nav_mesh: nav_mesh, v1: v1, v2: v2, v3: v3, v4: v4, v5: v5, v6: v6, v7: v7, face2: face2, face3: face3}}
   end
 
-  test "get adjacent vertices success", %{nav_mesh: nav_mesh, v1: v1, v2: v2, v3: v3, v4: v4, v5: v5, v6: v6, v7: v7} do
+  test "get adjacent vertices success", %{nav_mesh: nav_mesh, v3: v3, v4: v4, v5: v5, v7: v7} do
     assert {:ok, [^v3, ^v4, ^v5, ^v7]} = NavMesh.get_adjacent_vertices(nav_mesh, v5)
   end
 
@@ -63,7 +63,7 @@ defmodule NavigationMeshTest do
     assert MapSet.size(face_set) == 0
   end
 
-  test "find connected faces vertex not part of nav mesh", %{nav_mesh: nav_mesh, v1: v1, v5: v5} do
+  test "find connected faces vertex not part of nav mesh", %{nav_mesh: nav_mesh, v1: v1} do
     message = NavMesh.error_vertex_not_in_mesh
     assert {:error, ^message} = NavMesh.find_connected_faces(nav_mesh, {v1, %Vector2D{x: 23, y: 4}})
   end

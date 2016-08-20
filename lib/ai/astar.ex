@@ -43,7 +43,7 @@ defmodule Ai.Astar do
 
     #If it's in the goal face we can stop otherwise we check its neighbors
     if Face.contains?(goal_face, current) do
-      retrace_steps(parents, current, goal, %Path{})
+      retrace_steps(parents, current, goal)
     else
       #Set vertex as evaluated
       open_set   = MapSet.delete(open_set, current)
@@ -120,7 +120,7 @@ defmodule Ai.Astar do
   end
 
   @spec find_extreme_faces(NavMesh.t, Vector.t, Vector.t) :: Face.t
-  defp find_extreme_faces(%NavMesh{faces: faces} = nav_mesh, start, goal) do
+  defp find_extreme_faces(%NavMesh{} = nav_mesh, start, goal) do
     start_face = NavMesh.find_containing_face(nav_mesh, start)
     goal_face  = NavMesh.find_containing_face(nav_mesh, goal)
     {start_face, goal_face}
