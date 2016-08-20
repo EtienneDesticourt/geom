@@ -31,5 +31,4 @@ defmodule Geom.NavigationMesh do
   def find_containing_face(%NavigationMesh{faces: faces, vertices: _}, vertex) do
     Enum.find(faces, fn(face) -> Face.contains?(face, vertex) end)
   end
-
 end

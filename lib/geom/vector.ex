@@ -25,4 +25,7 @@ defprotocol Geom.Vector do
 
   @doc "Returns a vector of length one with the same direction as the given vector."
   def unit(vector)
+
+  @doc "Returns the distance between two vectors."
+  def dist(vector1, vector2)
 end

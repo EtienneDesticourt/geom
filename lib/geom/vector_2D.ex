@@ -42,4 +42,7 @@ defimpl Geom.Vector, for: Geom.Vector2D do
 
   def unit(%Vector2D{} = vector),
   do: Vector.div(vector, Vector.norm(vector))
+
+  def dist(%Vector2D{} = vector1, %Vector2D{} = vector2),
+  do: Vector.norm(Vector.sub(vector1, vector2))
 end
