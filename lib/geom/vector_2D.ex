@@ -6,6 +6,7 @@ defmodule Geom.Vector2D do
 
   @type t :: Vector.t
 
+  @derive [Poison.Encoder]
   defstruct x: 0, y: 0
 end
 

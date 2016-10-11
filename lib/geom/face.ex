@@ -8,12 +8,18 @@ defmodule Geom.Face do
 
   @type t :: %Face{v1: Vector.t, v2: Vector.t, v3: Vector.t}
 
+  @derive [Poison.Encoder]
   defstruct v1: nil, v2: nil, v3: nil
+
+  @doc "Returns true if the vector is one of the face's vertices, false otherwise."
+  @spec is_own_vertex?(Face.t, Vector.t) :: boolean
+  def is_own_vertex?(%Face{v1: v1, v2: v2, v3: v3}, v0),
+  do: v0 == v1 or v0 == v2 or v0 == v3
 
   @doc "Returns true if the vector is inside the face, false otherwise."
   @spec contains?(Face.t, Vector.t) :: boolean
-  def contains?(%Face{v1: v1, v2: v2, v3: v3}, v0) do
-    if v0 == v1 or v0 == v2 or v0 == v3 do
+  def contains?(%Face{v1: v1, v2: v2, v3: v3} = face, v0) do
+    if is_own_vertex?(face, v0) do
       true
     else
       # Compute vectors

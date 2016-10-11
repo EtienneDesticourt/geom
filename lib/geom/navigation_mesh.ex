@@ -9,6 +9,7 @@ defmodule Geom.NavigationMesh do
 
   @type t :: %__MODULE__{faces: [Face.t], vertices: %{Vector.t => %{Face.t => boolean}}}
 
+  @derive [Poison.Encoder]
   defstruct faces: %MapSet{}, vertices: %{}
 
   @error_vertex_not_in_mesh "Vertex not present in navigation mesh vertices."
@@ -18,7 +19,7 @@ defmodule Geom.NavigationMesh do
   @spec get_adjacent_vertices(NavigationMesh.t, Vector.t) :: {atom, [Vector.t] | String.t}
   def get_adjacent_vertices(%NavigationMesh{faces: _, vertices: vertices}, vertex) do
     if Map.has_key?(vertices, vertex) do
-      {:ok, vertices 
+      {:ok, vertices
             |> Map.get(vertex)
             |> Enum.flat_map(fn(%Face{v1: v1, v2: v2, v3: v3}) -> [v1, v2, v3] end)
             |> Enum.uniq}
