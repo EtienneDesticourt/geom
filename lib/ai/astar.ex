@@ -1,12 +1,12 @@
-defmodule Ai.Astar do
+defmodule Geom.Ai.Astar do
   @moduledoc """
   A* implementation for a navigation mesh.
   """
 
-  alias Geom.Face
-  alias Geom.NavigationMesh, as: NavMesh
-  alias Geom.Path
-  alias Geom.Vector
+  alias Geom.Shape.Face
+  alias Geom.Shape.NavigationMesh, as: NavMesh
+  alias Geom.Shape.Path
+  alias Geom.Shape.Vector
 
   @doc "Returns a path from the start vector to the goal vector along the nav mesh if it exists."
   @spec get_path(NavMesh.t, Vector.t, Vector.t) :: Path.t
@@ -57,13 +57,13 @@ defmodule Ai.Astar do
       if MapSet.size(open_set) == 0 do
         %Path{}
       else
-        find_path_recursion(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh)        
+        find_path_recursion(open_set, closed_set, g_score, f_score, parents, goal, goal_face, nav_mesh)
       end
     end
   end
 
   defp evaluate_neighbors(neighbors, current, goal, open_set, closed_set, g_score, f_score, parents) do
-    Enum.reduce(neighbors, 
+    Enum.reduce(neighbors,
       {open_set, g_score, f_score, parents},
       fn(v, {open_set, g_score, f_score, parents}) ->
         evaluate_neighbor(v, current, goal, open_set, closed_set, g_score, f_score, parents)
@@ -91,7 +91,7 @@ defmodule Ai.Astar do
 
         :else ->
           {parents, g_score, f_score} = update_neighbor(neighbor, goal, parent, parents,new_g_score, g_score, f_score)
-          {open_set, g_score, f_score, parents}        
+          {open_set, g_score, f_score, parents}
       end
     end
   end
@@ -100,7 +100,7 @@ defmodule Ai.Astar do
     parents = Map.put(parents, neighbor, parent)
     g_score = Map.put(g_score, neighbor, new_g_score)
     f_score = Map.put(f_score, neighbor, new_g_score + Vector.dist(neighbor, goal))
-    {parents, g_score, f_score}    
+    {parents, g_score, f_score}
   end
 
   @spec retrace_steps(%{}, Vector.t, Vector.t, Path.t) :: Path.t

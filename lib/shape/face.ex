@@ -1,10 +1,10 @@
-defmodule Geom.Face do
+defmodule Geom.Shape.Face do
   @moduledoc """
   The face of a polygon represented by its 3 vertices.
   """
 
-  alias Geom.Face
-  alias Geom.Vector
+  alias Geom.Shape.Face
+  alias Geom.Shape.Vector
 
   @type t :: %Face{v1: Vector.t, v2: Vector.t, v3: Vector.t}
 

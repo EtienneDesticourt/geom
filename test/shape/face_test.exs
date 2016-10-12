@@ -1,7 +1,7 @@
-defmodule Geom.FaceTest do
+defmodule Geom.Shape.FaceTest do
   use ExUnit.Case
-  alias Geom.Face
-  alias Geom.Vector2D
+  alias Geom.Shape.Face
+  alias Geom.Shape.Vector2D
 
   test "contains? when vertex in face" do
     face = %Face{v1: %Vector2D{x: 2, y: 2}, v2: %Vector2D{x: 6, y: 3}, v3: %Vector2D{x: 3, y: 4}}

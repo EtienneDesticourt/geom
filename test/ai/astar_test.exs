@@ -1,10 +1,10 @@
-defmodule Ai.AstarTest do
+defmodule Geom.Ai.AstarTest do
   use ExUnit.Case
-  alias Ai.Astar
-  alias Geom.Vector2D
-  alias Geom.Face
-  alias Geom.NavigationMesh, as: NavMesh
-  alias Geom.Path
+  alias Geom.Ai.Astar
+  alias Geom.Shape.Vector2D
+  alias Geom.Shape.Face
+  alias Geom.Shape.NavigationMesh, as: NavMesh
+  alias Geom.Shape.Path
 
   setup do
     v1 = %Vector2D{x: 1, y: 1}

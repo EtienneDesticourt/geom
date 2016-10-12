@@ -1,11 +1,11 @@
-defmodule Geom.NavigationMesh do
+defmodule Geom.Shape.NavigationMesh do
   @moduledoc """
   A face-vertex representation of a navigation mesh.
   """
 
-  alias Geom.Face
-  alias Geom.NavigationMesh
-  alias Geom.Vector
+  alias Geom.Shape.Face
+  alias Geom.Shape.NavigationMesh
+  alias Geom.Shape.Vector
 
   @type t :: %__MODULE__{faces: [Face.t], vertices: %{Vector.t => %{Face.t => boolean}}}
 

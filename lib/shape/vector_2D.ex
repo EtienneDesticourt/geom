@@ -1,8 +1,8 @@
-defmodule Geom.Vector2D do
+defmodule Geom.Shape.Vector2D do
   @moduledoc """
   A 2D implementation of the vector protocol.
   """
-  alias Geom.Vector
+  alias Geom.Shape.Vector
 
   @type t :: Vector.t
 
@@ -10,9 +10,9 @@ defmodule Geom.Vector2D do
   defstruct x: 0, y: 0
 end
 
-defimpl Geom.Vector, for: Geom.Vector2D do
-  alias Geom.Vector
-  alias Geom.Vector2D
+defimpl Geom.Shape.Vector, for: Geom.Shape.Vector2D do
+  alias Geom.Shape.Vector
+  alias Geom.Shape.Vector2D
 
   def add(%Vector2D{x: x1, y: y1}, %Vector2D{x: x2, y: y2}),
   do: %Vector2D{x: x1 + x2, y: y1 + y2}

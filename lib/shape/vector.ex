@@ -1,4 +1,4 @@
-defprotocol Geom.Vector do
+defprotocol Geom.Shape.Vector do
   @moduledoc """
   A protocol with the functions to be implemented by the vectors of different dimensions.
   """
