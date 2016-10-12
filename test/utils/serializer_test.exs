@@ -5,7 +5,7 @@ defmodule SerializerTest do
   alias Geom.Vector2D
   alias Utils.Serializer
 
-  @temp_file_path "test/temp/test_file"
+  @temp_file_path "temp_test_file"
 
   setup do
     v1 = %Vector2D{x: 1, y: 1}
