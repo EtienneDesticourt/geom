@@ -7,12 +7,13 @@ defmodule Geom.Ai.Astar do
   alias Geom.Shape.NavigationMesh, as: NavMesh
   alias Geom.Shape.Path
   alias Geom.Shape.Vector
+  alias Geom.Shape.Vector2D
 
   @doc "Returns a path from the start vector to the goal vector along the nav mesh if it exists."
-  @spec get_path(NavMesh.t, Vector.t, Vector.t) :: Path.t
-  def get_path(nav_mesh, start, goal) do
+  @spec get_path(NavMesh.t, Vector.t, Vector.t) :: {:ok, Path.t}
+  def get_path(%NavMesh{} = nav_mesh, %Vector2D{} = start, %Vector2D{} = goal) do
     extreme_faces = find_extreme_faces(nav_mesh, start, goal)
-    case extreme_faces do
+    path = case extreme_faces do
       {%Face{} = single_face, %Face{} = single_face} ->
         %Path{vertices: [start, goal]}
 
@@ -22,7 +23,11 @@ defmodule Geom.Ai.Astar do
       _ ->
         Path.empty
     end
+    {:ok, path}
   end
+
+  def get_path(_, _, _),
+  do: {:error, :wrong_arguments}
 
   @spec find_path(Vector.t, Vector.t, Face.t, Face.t, NavMesh.t) :: Path.t
   defp find_path(start, goal, %Face{v1: v1, v2: v2, v3: v3}, goal_face, nav_mesh) do
