@@ -1,8 +1,8 @@
-defmodule NavigationMeshTest do
+defmodule Geom.Shape.NavigationMeshTest do
   use ExUnit.Case
-  alias Geom.NavigationMesh, as: NavMesh
-  alias Geom.Face
-  alias Geom.Vector2D
+  alias Geom.Shape.NavigationMesh, as: NavMesh
+  alias Geom.Shape.Face
+  alias Geom.Shape.Vector2D
 
   setup do
     v1 = %Vector2D{x: 1, y: 1}

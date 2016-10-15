@@ -1,9 +1,9 @@
-defmodule Geom.Path do
+defmodule Geom.Shape.Path do
   @moduledoc """
   A pretty useless wrapper for List for now.
   """
 
-  alias Geom.Path
+  alias Geom.Shape.Path
 
   defstruct vertices: []
 
@@ -21,4 +21,7 @@ defmodule Geom.Path do
 
   def reverse(%Path{vertices: vertices}),
   do: %Path{vertices: vertices |> Enum.reverse}
+
+  def merge(%Path{vertices: vertices1}, %Path{vertices: vertices2}),
+  do: %Path{vertices: vertices1 ++ vertices2}
 end

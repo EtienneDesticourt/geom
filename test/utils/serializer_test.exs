@@ -1,9 +1,9 @@
-defmodule SerializerTest do
+defmodule Geom.Utils.SerializerTest do
   use ExUnit.Case
-  alias Geom.NavigationMesh, as: NavMesh
-  alias Geom.Face
-  alias Geom.Vector2D
-  alias Utils.Serializer
+  alias Geom.Shape.NavigationMesh, as: NavMesh
+  alias Geom.Shape.Face
+  alias Geom.Shape.Vector2D
+  alias Geom.Utils.Serializer
 
   @temp_file_path "temp_test_file"
 

@@ -1,7 +1,7 @@
-defmodule Utils.Serializer do
-    alias Geom.NavigationMesh
-    alias Geom.Face
-    alias Geom.Vector2D
+defmodule Geom.Utils.Serializer do
+    alias Geom.Shape.NavigationMesh
+    alias Geom.Shape.Face
+    alias Geom.Shape.Vector2D
 
     def serialize(%NavigationMesh{faces: faces, vertices: _}, file_path) do
         {:ok, file} = File.open(file_path, [:write])

@@ -1,4 +1,4 @@
-defprotocol Geom.Vector do
+defprotocol Geom.Shape.Vector do
   @moduledoc """
   A protocol with the functions to be implemented by the vectors of different dimensions.
   """
@@ -28,4 +28,7 @@ defprotocol Geom.Vector do
 
   @doc "Returns the distance between two vectors."
   def dist(vector1, vector2)
+
+  @doc "Returns whether two vectors are equal within an epsilon error value."
+  def equal(vector1, vector2, epsilon)
 end

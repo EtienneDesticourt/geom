@@ -3,7 +3,7 @@ defmodule Geom.Mixfile do
 
   def project do
     [app: :geom,
-     version: "0.1.0",
+     version: "1.0.0",
      elixir: "~> 1.3",
      description: description(),
      build_embedded: Mix.env == :prod,
@@ -17,7 +17,7 @@ defmodule Geom.Mixfile do
   end
 
   defp deps do
-    [{:poison, "~> 3.0"},
+    [{:poison, "~> 2.0 or ~>3.0"},
      {:ex_doc, ">= 0.0.0", only: :docs}]
   end
 
