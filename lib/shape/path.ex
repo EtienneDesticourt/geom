@@ -21,4 +21,7 @@ defmodule Geom.Shape.Path do
 
   def reverse(%Path{vertices: vertices}),
   do: %Path{vertices: vertices |> Enum.reverse}
+
+  def merge(%Path{vertices: vertices1}, %Path{vertices: vertices2}),
+  do: %Path{vertices: vertices1 ++ vertices2}
 end

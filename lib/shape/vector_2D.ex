@@ -44,6 +44,12 @@ defimpl Geom.Shape.Vector, for: Geom.Shape.Vector2D do
   def unit(%Vector2D{} = vector),
   do: Vector.div(vector, Vector.norm(vector))
 
+  def unit(%Vector2D{x: 0, y: 0} = vector),
+  do: vector
+
   def dist(%Vector2D{} = vector1, %Vector2D{} = vector2),
   do: Vector.norm(Vector.sub(vector1, vector2))
+
+  def equal(%Vector2D{} = vector1, %Vector2D{} = vector2, epsilon) when is_number(epsilon),
+  do: Vector.dist(vector1, vector2) <= epsilon
 end
