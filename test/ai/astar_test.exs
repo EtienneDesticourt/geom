@@ -46,16 +46,16 @@ defmodule Geom.Ai.AstarTest do
   test "get_path same face", %{nav_mesh: nav_mesh} do
     v1 = %Vector2D{x: 2.5, y: 2}
     v2 = %Vector2D{x: 3, y: 2}
-    assert %Path{vertices: [^v1, ^v2]} = Astar.get_path(nav_mesh, v1, v2)
+    assert {:ok, %Path{vertices: [^v1, ^v2]}} = Astar.get_path(nav_mesh, v1, v2)
   end
 
   test "get_path outside mesh", %{nav_mesh: nav_mesh} do
     v1 = %Vector2D{x: 3, y: 2} #Inside face1
     v2 = %Vector2D{x: 10, y: 3} #outside mesh
 
-    assert %Path{vertices: []} = Astar.get_path(nav_mesh, v1, v2) #goal outside
-    assert %Path{vertices: []} = Astar.get_path(nav_mesh, v2, v1) #start outside
-    assert %Path{vertices: []} = Astar.get_path(nav_mesh, v2, v2) #both outside
+    assert {:ok, %Path{vertices: []}} = Astar.get_path(nav_mesh, v1, v2) #goal outside
+    assert {:ok, %Path{vertices: []}} = Astar.get_path(nav_mesh, v2, v1) #start outside
+    assert {:ok, %Path{vertices: []}} = Astar.get_path(nav_mesh, v2, v2) #both outside
   end
 
   test "get_path different faces", %{nav_mesh: nav_mesh} do
@@ -65,6 +65,6 @@ defmodule Geom.Ai.AstarTest do
     v4 = %Vector2D{x: 5, y: 3}
     v5 = %Vector2D{x: 8, y: 6}
 
-    assert %Path{vertices: [^v1, ^v3, ^v4, ^v5, ^v2]} = Astar.get_path(nav_mesh, v1, v2)
+    assert {:ok, %Path{vertices: [^v1, ^v3, ^v4, ^v5, ^v2]}} = Astar.get_path(nav_mesh, v1, v2)
   end
 end
