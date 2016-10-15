@@ -10,7 +10,7 @@ The package can be installed as:
 
     ```elixir
     def deps do
-      [{:geom, "~> 0.1.0"}]
+      [{:geom, "~> 1.0.0"}]
     end
     ```
 
